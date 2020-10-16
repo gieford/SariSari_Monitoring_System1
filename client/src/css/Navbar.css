@@ -1,0 +1,149 @@
+ ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #888;
+}
+
+.header-fixed-pos{
+  position: absolute;
+  left: 0%;
+  top: 100px;
+  z-index: 1;
+}
+
+li {
+  float: left;
+}
+
+li button, .dropbtn{
+  display: inline-block;
+  color: white;
+  padding: 14px 16px;
+  text-decoration: none;
+  text-align: center;
+}
+
+li a:hover, .dropdown:hover .dropbtn{
+  background-color: red;
+}
+
+li.dropdown{
+  display: inline-block;
+}
+
+.dropdown-content{
+  display: none;
+  position: absolute;
+  background-color: #b3cccc;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropbtn{
+/*  background-color: #888;*/
+  margin: 0;
+  border-style: ridge;
+  padding: 5px;
+}
+
+.dropdown-content a {
+  font-size: 15px;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #ffcc66}
+
+.dropdown:hover .dropdown-content{
+  display: block;
+}
+
+.font-format{
+  font-size: 12px;
+  color: black;
+  border-style: groove;
+  border-color: black;
+  border-width: thin;
+  padding: 5px;
+}
+
+.loginreglink-width-1 a,
+.loginreglink-width-2 button{
+	width: 100%;
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #dddddd;
+	box-sizing:border-box;
+}
+
+img.home-img{
+  width: 40px;;
+  height: 40px;
+  background: transparent;
+}
+
+.home-caption{
+  font-size: 12px;
+}
+
+.profile-btn-pos{
+  right: 0%;
+  top: 0%;
+  position: fixed;
+}
+
+.messagebar-btn-pos{
+  right: 50px;
+  top: 0%;
+  position: fixed;
+}
+
+.mycart-btn-pos-after-login{
+  z-index: 1;
+  right: 100px;
+  top: 0%;
+  position: fixed;
+}
+
+.mycart-btn-pos-before-login{
+  z-index: 1;
+  right: 0px;
+  top: 0%;
+  position: fixed;
+}
+
+.mycart-number-label-pos{
+  position: absolute;
+  right: 2px;
+  bottom: 0px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+button.home-button{
+  padding: 2.5px 2.5px 2.5px 2.5px;
+  width: 50px;;
+  height: 50px;
+  background: transparent;
+}
+
+.auths-background{
+  background-image: url("../icons/auths.png");
+  width: 50px;
+  height: 50px;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+.auths-btn{
+  width: 100%;
+}

@@ -1,0 +1,54 @@
+
+
+/* Main content */
+.main {
+  margin-left: 0px; /* Same as the width of the sidenav */
+  font-size: 20px; /* Increased text to enable scrolling */
+  padding: 0px 5px;
+  margin-top: 0px;
+}
+
+.home-background{
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+
+.home-btn-pos{
+  left: 0%;
+  top: 0%;
+  position: fixed;
+}
+
+.sadmin-auths-btn-pos{
+  left: 50px;
+  top: 0%;
+  position: fixed;
+}
+
+.sadmin-products-btn-pos{
+  left: 100px;
+  top: 0%;
+  position: fixed;
+}
+
+.sadmin-stores-btn-pos{
+  left: 150px;
+  top: 0%;
+  position: fixed;
+}
+
+.sadmin-order-btn-pos{
+  left: 200px;
+  top: 0%;
+  position: fixed;
+}
+
+.navbar-btn-label{
+  font-size: 11px;
+  font-weight: bold;
+}

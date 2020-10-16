@@ -1,0 +1,20 @@
+
+
+git checkout -b yourbranchname
+
+if node modules is not found in client
+
+npm install react-scripts --save
+
+
+origin doesnt apppear to be a git repository
+
+ git remote add origin /Volumes/500gb/myproject.git
+
+
+failed t o push some refs to a certain link
+
+$ git push origin master --force
+Or
+
+$ git push origin master -f

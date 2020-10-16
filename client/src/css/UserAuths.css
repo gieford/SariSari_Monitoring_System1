@@ -1,0 +1,54 @@
+.user-authlist-pos-left{
+  float: left;
+  overflow: auto;
+  align-items: center;
+  left: 0;
+  width: 49%;
+}
+
+.user-authlist-pos-right{
+  position: absolute;
+  overflow-x: auto;
+  margin-left: 51%;
+  width: 49%;
+}
+
+.search-pos{
+  float: right;
+}
+
+.authlist-button-pos{
+  margin-right: 0px;
+  margin-top: 70px;
+
+}
+
+.userauth-search-pos{
+  margin-top: 70px;
+  position: fixed;
+  align-self: center;
+
+}
+
+.table-form {
+  padding-top: 55px;
+	width: 100%;
+	margin: 0 auto;
+	font-family: Tahoma, Geneva, sans-serif;
+}
+
+th,td{
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+td.td-del-btn{
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.role-select-roleauths{
+  position: relative;
+}

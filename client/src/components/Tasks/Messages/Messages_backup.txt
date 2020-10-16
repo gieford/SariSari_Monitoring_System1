@@ -1,0 +1,522 @@
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+
+import {alertMessage} from '../../alertMessage'
+import { isJWTExpires } from '../../Auth/checkJwt'
+import { sortAlgorithm } from '../../Algorithms/sortAlgo'
+
+import { getAllInboxMessages,getAllSentboxMessages,getMsgInfo,updateRead,createMsg,findUserEmail } from './MessagesOperation'
+import jwt_decode from 'jwt-decode'
+
+import "../../../css/Messages.css"
+
+class Messages extends Component {
+  constructor(){
+    super();
+    this.state={
+      id: '',
+      from: '',
+      to: '',
+      to_role: '',
+      content: '',
+      date_created: '',
+      messagelists_inbox: [],
+      messagelists_sentbox: [],
+      read: 'false',
+      replyMsg: '',
+      errors: {}
+    }
+    this.onChange = this.onChange.bind(this)
+  }
+
+  //#######################################################################################
+
+  onChange = (e) =>{
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  //#######################################################################################
+  logOut() {
+    alertMessage("JWT Expired. Logging OUT!",1000)
+    localStorage.removeItem('usertoken')
+    this.props.history.push(`/`)
+    window.history.pushState(null,null,'/')
+  }
+  //#######################################################################################
+  componentDidMount() {
+    if(isJWTExpires(localStorage.usertoken)){
+      this.logOut()
+    }
+    this.getAllInboxMessages()
+    this.dispInboxMsgDiv()
+  }
+  //#########################################################################################
+
+  getAllInboxMessages = () => {
+    const user={
+      userEmail: jwt_decode(localStorage.usertoken).email
+    }
+    getAllInboxMessages(user).then(res => {
+      if(res.length===0){
+        alertMessage("Empty Messages",2000);
+      }else{
+        this.setState({
+          //messagelists_inbox: [...res]
+          messagelists_inbox: sortAlgorithm([...res],"date_created","desc")
+        })
+      }
+    })
+  }
+//#########################################################################################
+  getAllSentboxMessages = () => {
+    const user={
+      userEmail: jwt_decode(localStorage.usertoken).email
+    }
+    getAllSentboxMessages(user).then(res => {
+      if(res.length===0){
+        alertMessage("Empty Messages",2000);
+      }else{
+        this.setState({
+          //messagelists_inbox: [...res]
+          messagelists_sentbox: sortAlgorithm([...res],"date_created","desc")
+        })
+      }
+    })
+  }
+  //#########################################################################################
+
+  dispViewMsgDiv = () => {
+    var mydiv = document.getElementById('myViewInboxMsgDiv');
+    ReactDOM.findDOMNode(mydiv).style.display='block';
+  }
+  //#########################################################################################
+
+  hideViewMsgDiv = () => {
+    var mydiv = document.getElementById('myViewInboxMsgDiv');
+    ReactDOM.findDOMNode(mydiv).style.display='none';
+    this.getAllInboxMessages()
+
+    this.setState({
+      to: '',
+      from: '',
+      replyMsg: '',
+      content: '',
+    })
+  }
+  //#########################################################################################
+
+  dispViewMsgDivOnly = () => {
+    var mydiv = document.getElementById('myViewSentboxMsgDivOnly');
+    ReactDOM.findDOMNode(mydiv).style.display='block';
+  }
+  //#########################################################################################
+
+  hideViewMsgDivOnly = () => {
+    var mydiv = document.getElementById('myViewSentboxMsgDivOnly');
+    ReactDOM.findDOMNode(mydiv).style.display='none';
+    this.getAllSentboxMessages()
+    this.setState({
+      to: '',
+      from: '',
+      content: '',
+    })
+  }
+  //#################################################################################
+
+  dispCreateMsgDiv = () => {
+    var mydiv = document.getElementById('myCreateMsgDiv');
+    ReactDOM.findDOMNode(mydiv).style.display='block';
+  }
+  //#########################################################################################
+
+  hideCreateMsgDiv = () => {
+    var mydiv = document.getElementById('myCreateMsgDiv');
+    ReactDOM.findDOMNode(mydiv).style.display='none';
+    this.getAllInboxMessages()
+    this.setState({
+      to: '',
+      from: '',
+      content: ''
+    })
+
+  }
+//#################################################################################
+  dispInboxMsgDiv = () => {
+    var mydiv = document.getElementById('myInboxMsgDiv');
+    ReactDOM.findDOMNode(mydiv).style.display='block';
+    var mydiv2 = document.getElementById('mySentboxMsgDiv');
+    ReactDOM.findDOMNode(mydiv2).style.display='none';
+    this.getAllInboxMessages()
+  }
+  //#########################################################################################
+
+  hideInboxMsgDiv = () => {
+    var mydiv = document.getElementById('myInboxMsgDiv');
+    ReactDOM.findDOMNode(mydiv).style.display='none';
+    var mydiv2 = document.getElementById('mySentboxMsgDiv');
+    ReactDOM.findDOMNode(mydiv2).style.display='block';
+    this.getAllSentboxMessages()
+  }
+
+
+
+//##############################################################
+  onMouseDown_ViewMsg = (e) =>{
+      const mymsgId = {
+        id: e.target.id
+      }
+      getMsgInfo(mymsgId).then(res => {
+        if(res===null){
+          alertMessage("Unable to get message infos",2000);
+        }else{
+          this.setState({
+            from: res.from,
+            to: res.to,
+            content: res.content,
+            date_created: res.date_created
+          })
+
+          const mymsgId2 = {
+            id: res.id,
+            read: 'true'
+          }
+          updateRead(mymsgId2).then(res=>{
+
+          })
+          this.dispViewMsgDiv()
+        }
+      })
+    }
+
+//##############################################################
+  onMouseDown_ViewMsgOnly = (e) =>{
+      const mymsgId = {
+        id: e.target.id
+      }
+
+      getMsgInfo(mymsgId).then(res => {
+        if(res===null){
+          alertMessage("Unable to get message infos",2000);
+        }else{
+          this.setState({
+            from: res.from,
+            to: res.to,
+            content: res.content,
+            date_created: res.date_created
+          })
+
+          const mymsgId2 = {
+            id: res.id,
+            read: 'true'
+          }
+          updateRead(mymsgId2).then(res=>{
+
+          })
+          this.dispViewMsgDivOnly()
+        }
+      })
+    }
+//####################################################################
+  onSendReply = (e) => {
+    console.log("hi");
+    /*
+    const mymsgData = {
+      to: this.state.from,
+      to_role: null,
+      from: this.state.to,
+      content: this.state.replyMsg,
+      read: 'false'
+    }
+
+    createMsg(mymsgData).then(res=>{
+      res=false
+//      this.hideViewMsgDiv()
+      if(res===true){
+        alertMessage("Message Sent",2000);
+/*        this.setState({
+          to: '',
+          from: '',
+          content: '',
+        })
+*      }else{
+        alertMessage("Message Not Sent",2000);
+      }
+    })
+//    setTimeout("this.hideViewMsgDiv()", 2000)
+*/
+  }
+  //#########################################################################################
+
+onCreateMsg = (e) => {
+  const mymsgData = {
+    to: this.state.to,
+    to_role: null,
+    from: jwt_decode(localStorage.usertoken).email,
+    content: this.state.content,
+    read: 'false'
+  }
+
+  createMsg(mymsgData).then(res=>{
+    if(res===true){
+      alertMessage("Message Sent",2000);
+/*      this.setState({
+        to: '',
+        from: '',
+        content: '',
+      })
+*/    }else{
+      alertMessage("Message Not Sent",2000);
+    }
+  })
+}
+//#########################################################################################
+
+onChangeAndFindTo = (e) =>{
+  this.setState({ [e.target.name]: e.target.value })
+
+  const myuserEmail = {
+    email: e.target.value
+  }
+
+  findUserEmail(myuserEmail).then(res=>{
+    if(res){
+      this.enableMsgTextArea()
+    }else{
+      this.disableMsgTextArea()
+    }
+  })
+
+}
+//#########################################################################################
+
+enableMsgTextArea = () => {
+  var mydiv = document.getElementById('mymsgtextarea');
+  ReactDOM.findDOMNode(mydiv).readOnly=false;
+  ReactDOM.findDOMNode(mydiv).placeholder="Enter msg here";
+}
+//#########################################################################################
+
+disableMsgTextArea = () => {
+  var mydiv = document.getElementById('mymsgtextarea');
+  ReactDOM.findDOMNode(mydiv).readOnly=true;
+  ReactDOM.findDOMNode(mydiv).placeholder="Email doesnt exist";
+}
+
+
+  render() {
+    return (
+
+
+
+
+      <div className="landing-background">
+        <br></br>
+        <button onClick={this.dispLogin}>Login </button>
+        <button onClick={this.dispRegister}>Register </button>
+
+        <div id="myLoginDiv" className="modal">
+          <form className="modal-content animate" onSubmit={this.onLogin}>
+            <div className="imgcontainer">
+              <span onClick={this.hideLogin} className="close"
+              title="Close"> &times;
+              </span>
+              <img src="icons/login.png" alt="Avatar" className="avatar"/>
+            </div>
+            <div className="container">
+              <label>
+                <b>Username</b>
+              </label>
+              <input type="text" className="width-100" placeholder= "Enter Username" name="email" value={this.state.email} onChange={this.onChange} required />
+              <label><b>Password</b></label>
+              <input type="password" className="width-100" placeholder= "Enter Password" name="password" value={this.state.password} onChange={this.onChange} required />
+              <button className="loginbtn" type="submit">Login</button>
+
+            </div>
+            <div className="container">
+              <button type="button" onClick={this.hideLogin} className="cancelbtn"> Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="myRegisterDiv" className="modal">
+          <form className="modal-content animate" onSubmit={this.onRegister}>
+            <div className="imgcontainer">
+              <span onClick={this.hideRegister} className="close"
+              title="Close"> &times;
+              </span>
+              <img src="icons/login.png" alt="Avatar" className="avatar"/>
+            </div>
+            <div className="container">
+              <label><b>Firstname</b></label>
+              <input className="width-100" type="text" placeholder= "Enter Firstname" name="first_name" value={this.state.first_name} onChange={this.onChange} required/>
+              <label><b>Lastname</b></label>
+              <input className="width-100" type="text" placeholder= "Enter lastname" name="last_name" value={this.state.last_name} onChange={this.onChange} required/>
+              <label><b>Username</b></label>
+              <input className="width-100" type="text" placeholder= "Enter Username" name="email" value={this.state.email} onChange={this.onChange} required/>
+              <label><b>Password</b></label>
+              <input className="width-100" type="password" placeholder= "Enter Password" name="password" value={this.state.password} onChange={this.onChange} required/>
+              <button className="loginbtn" type="submit">Register</button>
+            </div>
+            <div className="container">
+              <button type="button" onClick={this.hideRegister} className="cancelbtn"> Cancel</button>
+            </div>
+          </form>
+        </div>
+
+
+        <h1>WELCOME</h1>
+        <h2>to</h2>
+        <h1>Product Monitoring and Ordering System</h1>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div className="myMSG">
+          <br />
+          <h2>Messages</h2>
+          <div>
+            <button onClick={this.dispInboxMsgDiv}>Inbox</button>
+            <button onClick={this.hideInboxMsgDiv}>Sentbox</button>
+          </div>
+
+          <div id="myInboxMsgDiv" >
+            <h3>Inbox</h3>
+            <table className="message-table-width">
+              <thead>
+              </thead>
+                {this.state.messagelists_inbox.map((data,i)=>{
+                  return (
+                    <tr key={i} className="list">
+                      <td id={data.id} onMouseDown={this.onMouseDown_ViewMsg} className="align-text-left msg-height">
+                        {
+                          (data.read==='true')?
+                          <img src="icons/read_message.jpg" alt='' className="message-read-unread-pos"></img>
+                          :<img src="icons/message.jpg" alt='' className="message-read-unread-pos"></img>
+                        }
+                        From:  <b>{data.from}</b> {data.date_created}
+                      </td>
+                    </tr>
+                  )
+                })}
+            </table>
+
+            <div id="myViewInboxMsgDiv" className="modal">
+              <form className="modal-content2 animate" onSubmit={this.onSendReply}>
+                <div className="imgcontainer">
+                  <span onClick={this.hideViewMsgDiv} className="close"
+                  title="Close"> &times;
+                  </span>
+                </div>
+                <div className="container">
+                  <label><b>From</b></label>
+                  <input className="width-100"  type="text" value={this.state.from} readOnly/>
+                  <label><b>Content</b></label>
+                  <textarea className="width-100"  type="text" value={this.state.content} rows="5" readOnly/>
+                  <br />
+                  <br />
+                  <label><b>Reply</b></label>
+                  <textarea className="width-100"  type="text" placeholder= "Enter Reply here" name="replyMsg" value={this.state.replyMsg} onChange={this.onChange} rows="5" required/>
+
+                  <button className="loginbtn" type="submit">Send</button>
+                </div>
+                <div className="container">
+                  <button type="button" onClick={this.hideViewMsgDiv} className="cancelbtn"> Cancel</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+          <div id="mySentboxMsgDiv" >
+            <h3>Sentbox</h3>
+            <table className="message-table-width">
+              <thead>
+              </thead>
+                {this.state.messagelists_sentbox.map((data,i)=>{
+                  return (
+                    <tr key={i} className="list">
+                      <td id={data.id} onMouseDown={this.onMouseDown_ViewMsgOnly} className="align-text-left msg-height">
+                        <img src="icons/read_message.jpg" alt='' className="message-read-unread-pos"></img>
+                        To: {data.to} {data.date_created}
+                      </td>
+                    </tr>
+                  )
+                })}
+            </table>
+          </div>
+
+
+          <div id="myViewSentboxMsgDivOnly" className="modal">
+            <form className="modal-content2 animate">
+              <div className="imgcontainer">
+                <span onClick={this.hideViewMsgDivOnly} className="close"
+                title="Close"> &times;
+                </span>
+              </div>
+              <div className="container">
+                <label><b>To</b></label>
+                <input className="width-100"  type="text" value={this.state.to} readOnly/>
+                <label><b>Content</b></label>
+                <textarea className="width-100"  type="text" value={this.state.content} rows="5" readOnly/>
+                <br />
+                <br />
+              </div>
+              <div className="container">
+                <button type="button" onClick={this.hideViewMsgDivOnly} className="cancelbtn"> Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="myCreateMsgDiv" className="modal">
+            <form className="modal-content2 animate" onSubmit={this.onCreateMsg}>
+              <div className="imgcontainer">
+                <span onClick={this.hideCreateMsgDiv} className="close"
+                title="Close"> &times;
+                </span>
+              </div>
+              <div className="container">
+                <label><b>To</b></label>
+                <input className="width-100"  type="text" name="to" value={this.state.to} onChange={this.onChangeAndFindTo} required/>
+                <label><b>Content</b></label>
+                <textarea id="mymsgtextarea" className="width-100"  type="text" name="content"  value={this.state.content} rows="5" onChange={this.onChange} readOnly required/>
+                <button className="loginbtn" type="submit">Send</button>
+              </div>
+              <div className="container">
+                <button type="button" onClick={this.hideCreateMsgDiv} className="cancelbtn"> Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <div className="createmsg-btn-pos">
+            <button className="createmsg-background" onClick={this.dispCreateMsgDiv}></button>
+          </div>
+
+        </div>
+
+    )
+  }
+}
+
+export default Messages

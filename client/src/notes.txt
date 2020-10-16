@@ -1,0 +1,3 @@
+//reactjs function
+//  func1()   need to be bind
+//    func1 = () =>    dont need

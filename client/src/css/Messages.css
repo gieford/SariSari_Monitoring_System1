@@ -1,0 +1,42 @@
+.align-text-left{
+    text-align: left;
+    padding-left: 60px;
+}
+
+.msg-height{
+  height: 80px;
+}
+
+.message-table-width{
+  margin-left: 10%;
+  width: 80%;
+}
+
+.message-content-size{
+  height: 100px;
+}
+
+.message-read-unread-pos{
+  position: absolute;
+  left: 0%;
+}
+
+.myMSG{
+    overflow: auto;
+}
+
+tr.list{
+  background-color: #f2f2f2;
+}
+
+.createmsg-background{
+  background-image: url("../icons/create_message.jpg");
+  width: 55px;
+  height: 55px;
+}
+
+.createmsg-btn-pos{
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+}

@@ -1,0 +1,40 @@
+.profile-form {
+	width: 100%;
+	margin: 0 auto;
+	font-family: Tahoma, Geneva, sans-serif;
+}
+.profile-form h1 {
+	text-align: center;
+	color: #4d4d4d;
+	font-size: 24px;
+	padding: 0px 0 0px 0;
+}
+
+.profile-form thead { color:#4d4d4d; }
+.profile-form tbody { color:#4d4d4d; }
+.profile-form table, .profile-form tbody{
+ width: 100%;
+}
+.profile-form table, .profile-form th, .profile-form td {
+ border: 1px solid black;
+}
+.profile-form td, .profile-form th{
+ padding: 1px;
+}
+
+.profile-label-width{
+	width: 25%;
+}
+
+.logoutbtn{
+	height: 20px;
+	position: fixed;
+	right: 0%;
+	top: 55px;
+	z-index: 1;
+}
+
+img.img-profile {
+	width: 100px;
+	border-radius: 100px;
+	}

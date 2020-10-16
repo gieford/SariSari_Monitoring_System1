@@ -1,0 +1,16 @@
+.authlist-pos-left{
+  overflow: auto;
+  left: 0;
+  width: 50%;
+  border-right: 1px solid #000;
+}
+
+.authlist-button-pos-right{
+  overflow: auto;
+  position: fixed;
+  top: 50px;
+  margin-left: 52%;
+  margin-right: 2%;
+  height: 100%;
+  width: 48%;
+}

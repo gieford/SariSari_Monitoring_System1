@@ -1,0 +1,61 @@
+.userlist-pos-left{
+  overflow: auto;
+  left: 0;
+  width: 50%;
+  border-right: 1px solid #000;
+/*  position: relative;  */
+}
+
+
+.userlist-button-right{
+  overflow: auto;
+  position: fixed;
+  top: 50px;
+  margin-left: 52%;
+  margin-right: 2%;
+  height: 100%;
+  width: 48%;
+}
+
+/*TABLE DESIGN*/
+tr:nth-child(even).table-list{
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(odd).table-list{
+  background-color: #ccddff;
+}
+
+
+table thead th {
+  background-color: #ccffcc;
+}
+
+.container{
+  overflow-x: auto;
+}
+
+
+table.table-width{
+width: 90%;
+}
+
+table{
+  border-style: ridge;
+  margin: 0 auto;
+}
+
+table.table-design{
+  position: static;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+
+label.sort-label-font{
+  font-size: 10px;
+}
+
+input.search-textbox{
+  width: 40%;
+}
